@@ -13,7 +13,7 @@ import slick.driver.H2Driver.api._
 
 import scala.concurrent.Future
 
-class UserDao @Inject()(dbConfigProvider: DatabaseConfigProvider) {
+class UserDao @Inject()(val dbConfigProvider: DatabaseConfigProvider) {
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
 

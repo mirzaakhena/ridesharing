@@ -3,28 +3,28 @@
 # --- !Ups
 
 CREATE TABLE user (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     password VARCHAR(8) NOT NULL,
     role VARCHAR(10) NOT NULL
 );
 
 CREATE TABLE passenger (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     status VARCHAR(25) NOT NULL
 );
 
 CREATE TABLE driver (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     status VARCHAR(25) NOT NULL,
     latitude double precision NOT NULL,
     longitude double precision NOT NULL
 );
 
 CREATE TABLE trip (
-    id SERIAL PRIMARY KEY,
-    id_passenger integer NOT NULL DEFAULT 'null',
-    id_driver integer,
+    id INTEGER PRIMARY KEY,
+    id_passenger INTEGER NOT NULL DEFAULT 'null',
+    id_driver INTEGER,
     status varchar(25) NOT NULL DEFAULT 'REQUESTING',
     latitude_start DOUBLE PRECISION NOT NULL DEFAULT '0.0',
     longitude_start DOUBLE PRECISION NOT NULL DEFAULT '0.0',
