@@ -32,16 +32,16 @@ class TripDao @Inject()(dbConfigProvider: DatabaseConfigProvider) {
     (for {c <- table if c.id === idTrip} yield c.status) update status
 }
 
-class TripTable(tag: Tag) extends Table[Trip](tag, "trip") {
+class TripTable(tag: Tag) extends Table[Trip](tag, "TRIP") {
 
-  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-  def id_passenger = column[Int]("id_passenger")
-  def id_driver = column[Int]("id_driver")
-  def status = column[String]("status")
-  def latitude_start = column[Double]("latitude_start")
-  def longitude_start = column[Double]("longitude_start")
-  def latitude_end = column[Double]("latitude_end")
-  def longitude_end = column[Double]("longitude_end")
+  def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
+  def id_passenger = column[Int]("ID_PASSENGER")
+  def id_driver = column[Int]("ID_DRIVER")
+  def status = column[String]("STATUS")
+  def latitude_start = column[Double]("LATITUDE_START")
+  def longitude_start = column[Double]("LONGITUDE_START")
+  def latitude_end = column[Double]("LATITUDE_START")
+  def longitude_end = column[Double]("LONGITUDE_END")
 
   def * = (id, id_passenger, id_driver, status, latitude_start, longitude_start, latitude_end, longitude_end) <> ((Trip.apply _).tupled, Trip.unapply _)
 

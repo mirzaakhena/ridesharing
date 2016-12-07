@@ -5,7 +5,6 @@ import javax.inject.Inject
 
 import dao._
 import models._
-import play.api.libs.json.Json
 import services.ConnectionService
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -16,12 +15,14 @@ import scala.concurrent.Future
   */
 class ConnectionServiceImpl @Inject()(userDao: UserDao) extends ConnectionService {
 
-
   override def login(name: String, password: String): Future[String] = {
 
-    userDao.findByNameAndPassword("joni", "1234").map(x => {
+    userDao.findByNameAndPassword(name, password).map(x => {
       if(x.isDefined){
-        JsonWebToken(JwtHeader("HS256"), JwtClaimsSet(Map("id" -> "dasfa")), "secret")
+
+
+
+        JsonWebToken(JwtHeader("HS256"), JwtClaimsSet(Map("id" -> x.get.id.toString,"a"->"asdfa")), "secret")
       } else {
         ""
       }
@@ -31,6 +32,16 @@ class ConnectionServiceImpl @Inject()(userDao: UserDao) extends ConnectionServic
 
   override def showAll :Future[Seq[User]] = userDao.findAll()
 
-  override def extractToken(token: String): String = ???
+  override def extractToken(token: String): String = {
+    val claims: Option[Map[String, String]] = token match {
+      case JsonWebToken(header, claimsSet, signature) =>
+        claimsSet.asSimpleMap.toOption
+      case x =>
+        None
+    }
+
+    claims.getOrElse(Map.empty[String, String]).get("id").getOrElse("")
+
+  }
 
 }

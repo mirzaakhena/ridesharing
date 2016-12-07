@@ -32,10 +32,10 @@ class PassengerDao @Inject() (dbConfigProvider: DatabaseConfigProvider) {
     (for {c <- table if c.id === idPassenger} yield c.status) update status
 }
 
-class PassengerTable(tag: Tag) extends Table[Passenger](tag, "passenger") {
+class PassengerTable(tag: Tag) extends Table[Passenger](tag, "PASSENGER") {
 
-  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-  def status = column[String]("status")
+  def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
+  def status = column[String]("STATUS")
   
   def * = (id, status) <> ((Passenger.apply _).tupled, Passenger.unapply _)
 

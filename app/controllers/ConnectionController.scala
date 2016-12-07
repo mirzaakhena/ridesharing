@@ -11,8 +11,39 @@ import scala.concurrent.Future
 
 class ConnectionController @Inject()(connService: ConnectionService) extends Controller {
 
-  def login = Action.async {
-    connService.login("", "").map(x => Ok(Json.obj("token" -> x)))
+  case class LoginDto(email:String, password:String)
+
+  object LoginDto {
+    implicit val writer = Json.format[LoginDto]
+  }
+
+  def login = Action.async(BodyParsers.parse.json) {
+    request => {
+      val userLoginRequest = request.body.validate[LoginDto]
+
+      userLoginRequest.isSuccess match {
+        case false =>
+          Future(BadRequest(Json.obj("message" -> "Parsing input failed")))
+        case true =>
+          connService.login(userLoginRequest.asOpt.get.email, userLoginRequest.asOpt.get.password).map {
+            jwtToken =>
+              if (jwtToken.isEmpty){
+                Status(401)(Json.obj("Status" -> "Invalid Authorization"))
+              } else {
+                Ok(Json.obj("message" -> "Success Login", "jwt_Token" -> jwtToken))
+              }
+          }
+      }
+
+    }
+  }
+
+  def testToken = Action.async(parse.json) { request =>
+    implicit val tokenReader = Json.reads[TokenRequest]
+    request.body.validate[TokenRequest].map({ tokenRequest =>
+      val claims = connService.extractToken(tokenRequest.token)
+      Future.successful(Ok(Json.obj("claims" -> JsString(claims))))
+    }).recoverTotal( e => Future.successful(BadRequest()))
   }
 
   def showAll = Action.async {
@@ -22,3 +53,5 @@ class ConnectionController @Inject()(connService: ConnectionService) extends Con
   }
 
 }
+
+case class TokenRequest(token: String)

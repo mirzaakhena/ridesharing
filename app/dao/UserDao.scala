@@ -33,15 +33,15 @@ class UserDao @Inject()(val dbConfigProvider: DatabaseConfigProvider) {
 
 }
 
-class UserTable(tag: Tag) extends Table[User](tag, "user") {
+class UserTable(tag: Tag) extends Table[User](tag, "USER") {
 
-  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+  def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
 
-  def name = column[String]("name")
+  def name = column[String]("NAME")
 
-  def password = column[String]("password")
+  def password = column[String]("PASSWORD")
 
-  def role = column[String]("role")
+  def role = column[String]("ROLE")
 
   def * = (id, name, password, role) <> ((User.apply _).tupled, User.unapply _)
 

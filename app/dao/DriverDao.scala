@@ -32,12 +32,12 @@ class DriverDao @Inject() (dbConfigProvider: DatabaseConfigProvider) {
     (for {c <- table if c.id === idDriver} yield c.status) update status
 }
 
-class DriverTable(tag: Tag) extends Table[Driver](tag, "driver") {
+class DriverTable(tag: Tag) extends Table[Driver](tag, "DRIVER") {
 
-  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-  def status = column[String]("status")
-  def latitude = column[Double]("latitude")
-  def longitude = column[Double]("longitude")
+  def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
+  def status = column[String]("STATUS")
+  def latitude = column[Double]("LATITUDE")
+  def longitude = column[Double]("LONGITUDE")
 
   def * = (id, status, latitude, longitude) <> ((Driver.apply _).tupled, Driver.unapply _)
 
